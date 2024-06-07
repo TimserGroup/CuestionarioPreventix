@@ -148,6 +148,8 @@ export const questions = [
         id: 'sampleLocation',
         question: 'Lugar de toma de muestra',
         answers: [
+            'Sede Insurgentes - Sala de Ajustes',
+            'Edificio Revolución - Aula Cristal,
             'Suprema Corte',
             '16 de Septiembre',
             'Bolivar',
@@ -159,6 +161,8 @@ export const questions = [
         type: 'choice',
         nextq: 'docFQ',
         mapping: {
+            'Sede Insurgentes - Sala de Ajustes' : 1921,
+            'Edificio Revolución - Aula Cristal : 1922,
             '16 de Septiembre': 1915,
             'Suprema Corte': 1916,
             'Bolivar': 1917,
