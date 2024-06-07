@@ -270,7 +270,7 @@ const AppointmentForm = () => {
                     <div className="thank-you-message">
                         <h2>¡Muchas gracias por tu tiempo y participación!</h2>
                         <p>Tus respuestas se enviaron con éxito. Gracias por ser parte de la familia Preventix y contribuir a mejorar la atención médica para todas las mujeres.</p>
-                        <QRCode value={`${cachedData.patientName} ${cachedData.patientLastName}`} />
+                        <QRCode value={`${cachedData.patientFirstName} ${cachedData.patientLastName}`} />
                     </div>
                 ) : (
                     <div className="center">
