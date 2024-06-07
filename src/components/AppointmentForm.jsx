@@ -228,143 +228,147 @@ const AppointmentForm = () => {
         setShowFastingError(false);
         setResponses([]);
         setCachedData({});
-        setIsSubmitted(false); // Reset the submission state };const currentQuestion = questions[state.index];
+        setIsSubmitted(false); // Reset the submission state
+    };
 
-useEffect(() => {
-    if (currentQuestion && currentQuestion.type !== 'choice') {
-        setValue(currentQuestion.field, cachedData[currentQuestion.field] || '');
-    }
-}, [state.index, setValue, getValues, currentQuestion]);
+    const currentQuestion = questions[state.index];
 
-const handleFormSubmit = (e) => {
-    e.preventDefault();
-    const unansweredQuestions = [];
-    
-    questions.forEach((question, index) => {
-        const answer = getValues()[question.field];
-        if (!answer) {
-            unansweredQuestions.push(question.question);
+    useEffect(() => {
+        if (currentQuestion && currentQuestion.type !== 'choice') {
+            setValue(currentQuestion.field, cachedData[currentQuestion.field] || '');
         }
-    });
+    }, [state.index, setValue, getValues, currentQuestion]);
 
-    if (unansweredQuestions.length > 0) {
-        toast.error(`Por favor, responda las siguientes preguntas: ${unansweredQuestions.join(', ')}`);
-    } else {
-        handleSubmit(onSubmit)();
-    }
-};
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        const unansweredQuestions = [];
+        
+        questions.forEach((question, index) => {
+            const answer = getValues()[question.field];
+            if (!answer) {
+                unansweredQuestions.push(question.question);
+            }
+        });
 
-return (
-    <div className="appointment-page">
-        <ToastContainer />
-        <div className="logos">
-            <img src="/Logo-Preventix.png" alt="logo" className="logo-img"/>
-            <img src="/BanorteMHS.png" alt="logoBanorte" className="logo-img"/>
-        </div>
+        if (unansweredQuestions.length > 0) {
+            toast.error(`Por favor, responda las siguientes preguntas: ${unansweredQuestions.join(', ')}`);
+        } else {
+            handleSubmit(onSubmit)();
+        }
+    };
 
-        <div className="container">
-            {isSubmitted ? (
-                <div className="thank-you-message">
-                    <h2>¡Muchas gracias por tu tiempo y participación!</h2>
-                    <p>Tus respuestas se enviaron con éxito. Gracias por ser parte de la familia Preventix y contribuir a mejorar la atención médica para todas las mujeres.</p>
-                    <QRCode value={`${cachedData.patientName} ${cachedData.patientLastName}`} />
-                </div>
-            ) : (
-                <div className="center">
-                    {showFastingError ? (
-                        <div className="fasting-error">
-                            <p>Gracias por tu interés en realizarte la prueba. Para garantizar resultados precisos, es necesario un mínimo de 4 horas de ayuno. Si no cumples con este requisito, te pedimos reprogramar tu cita. </p>
-                            <p>Por favor acude con el personal en el sitio de muestra.</p>
-                            <p>Agradecemos tu comprensión.</p>
-                            <button onClick={handleAddAnotherForm} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                Reiniciar Formulario
-                            </button>
-                        </div>
-                    ) : (
-                        <form id="dynamic" onSubmit={handleFormSubmit}>
-                            <div className="question-wrap">
-                                <div className="question">
-                                    {currentQuestion.question}
-                                    {currentQuestion.explanation && (
-                                        <span
-                                            className="info-icon"
-                                            onClick={() => setShowExplanation(!showExplanation)}
-                                        >
-                                            ❔
-                                        </span>
-                                    )}
-                                </div>
-                                {showExplanation && currentQuestion.explanation && (
-                                    <div className="explanation">
-                                        {currentQuestion.explanation}
+    return (
+        <div className="appointment-page">
+            <ToastContainer />
+            <div className="logos">
+                <img src="/Logo-Preventix.png" alt="logo" className="logo-img"/>
+                <img src="/BanorteMHS.png" alt="logoBanorte" className="logo-img"/>
+            </div>
+
+            <div className="container">
+                {isSubmitted ? (
+                    <div className="thank-you-message">
+                        <h2>¡Muchas gracias por tu tiempo y participación!</h2>
+                        <p>Tus respuestas se enviaron con éxito. Gracias por ser parte de la familia Preventix y contribuir a mejorar la atención médica para todas las mujeres.</p>
+                        <QRCode value={`${cachedData.patientName} ${cachedData.patientLastName}`} />
+                    </div>
+                ) : (
+                    <div className="center">
+                        {showFastingError ? (
+                            <div className="fasting-error">
+                                <p>Gracias por tu interés en realizarte la prueba. Para garantizar resultados precisos, es necesario un mínimo de 4 horas de ayuno. Si no cumples con este requisito, te pedimos reprogramar tu cita. </p>
+                                <p>Por favor acude con el personal en el sitio de muestra.</p>
+                                <p>Agradecemos tu comprensión.</p>
+                                <button onClick={handleAddAnotherForm} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Reiniciar Formulario
+                                </button>
+                            </div>
+                        ) : (
+                            <form id="dynamic" onSubmit={handleFormSubmit}>
+                                <div className="question-wrap">
+                                    <div className="question">
+                                        {currentQuestion.question}
+                                        {currentQuestion.explanation && (
+                                            <span
+                                                className="info-icon"
+                                                onClick={() => setShowExplanation(!showExplanation)}
+                                            >
+                                                ❔
+                                            </span>
+                                        )}
                                     </div>
-                                )}
-                                <div className="answer">
-                                    {currentQuestion.type === 'slider' ? (
-                                        <SliderInput
-                                            label={currentQuestion.label || currentQuestion.question}
-                                            min={currentQuestion.min}
-                                            max={currentQuestion.max}
-                                            value={Number(currentQuestion.field === 'weight' ? weight : height)} // Ensure the value is a number
-                                            onChange={(e) => currentQuestion.field === 'weight' ? setWeight(Number(e.target.value)) : setHeight(Number(e.target.value))}
-                                            unit={currentQuestion.unit}
-                                            step={1} // Adjust step to 1 for whole number increments
-                                        />
-                                    ) : currentQuestion.type === 'date' ? (
-                                        <DateInput
-                                            selectedDate={birthDate}
-                                            setSelectedDate={setBirthDate}
-                                        />
-                                    ) : (
-                                        <>
-                                            {currentQuestion.type === 'choice' ? (
-                                                currentQuestion.answers.map((answer, index) => (
-                                                    <div key={index}>
-                                                        <label>
-                                                            <input type="radio" value={answer} {...register(currentQuestion.field)} defaultChecked={index === 0} /> {answer}
-                                                        </label>
-                                                    </div>
-                                                ))
-                                            ) : currentQuestion.type === 'multipleChoice' ? (
-                                                currentQuestion.answers.map((answer, index) => (
-                                                    <div key={index}>
-                                                        <label>
-                                                            <input type="checkbox" value={answer} {...register(currentQuestion.field)} /> {answer}
-                                                        </label>
-                                                    </div>
-                                                ))
-                                            ) : (
-                                                currentQuestion.type === 'time' && currentQuestion.id === 'lastMealTimeQ' ? (
-                                                    <HourInput
-                                                        selectedDate={lastMealTime}
-                                                        setSelectedDate={setLastMealTime}
-                                                    />
+                                    {showExplanation && currentQuestion.explanation && (
+                                        <div className="explanation">
+                                            {currentQuestion.explanation}
+                                        </div>
+                                    )}
+                                    <div className="answer">
+                                        {currentQuestion.type === 'slider' ? (
+                                            <SliderInput
+                                                label={currentQuestion.label || currentQuestion.question}
+                                                min={currentQuestion.min}
+                                                max={currentQuestion.max}
+                                                value={Number(currentQuestion.field === 'weight' ? weight : height)} // Ensure the value is a number
+                                                onChange={(e) => currentQuestion.field === 'weight' ? setWeight(Number(e.target.value)) : setHeight(Number(e.target.value))}
+                                                unit={currentQuestion.unit}
+                                                step={1} // Adjust step to 1 for whole number increments
+                                            />
+                                        ) : currentQuestion.type === 'date' ? (
+                                            <DateInput
+                                                selectedDate={birthDate}
+                                                setSelectedDate={setBirthDate}
+                                            />
+                                        ) : (
+                                            <>
+                                                {currentQuestion.type === 'choice' ? (
+                                                    currentQuestion.answers.map((answer, index) => (
+                                                        <div key={index}>
+                                                            <label>
+                                                                <input type="radio" value={answer} {...register(currentQuestion.field)} defaultChecked={index === 0} /> {answer}
+                                                            </label>
+                                                        </div>
+                                                    ))
+                                                ) : currentQuestion.type === 'multipleChoice' ? (
+                                                    currentQuestion.answers.map((answer, index) => (
+                                                        <div key={index}>
+                                                            <label>
+                                                                <input type="checkbox" value={answer} {...register(currentQuestion.field)} /> {answer}
+                                                            </label>
+                                                        </div>
+                                                    ))
                                                 ) : (
-                                                    <input type={currentQuestion.type} {...register(currentQuestion.field)} />
-                                                )
-                                            )}
-                                        </>
+                                                    currentQuestion.type === 'time' && currentQuestion.id === 'lastMealTimeQ' ? (
+                                                        <HourInput
+                                                            selectedDate={lastMealTime}
+                                                            setSelectedDate={setLastMealTime}
+                                                        />
+                                                    ) : (
+                                                        <input type={currentQuestion.type} {...register(currentQuestion.field)} />
+                                                    )
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="button-group">
+                                    {state.index > 0 && (
+                                        <button type="button" onClick={handlePrevious} className="back">Anterior</button>
+                                    )}
+                                    {state.index < questions.length - 1 && !showFastingError && (
+                                        <button type="button" onClick={handleNext} className="next">Siguiente</button>
+                                    )}
+                                    {state.index >= questions.length - 1 && (
+                                        <button type="submit">Enviar</button>
                                     )}
                                 </div>
-                            </div>
-
-                            <div className="button-group">
-                                {state.index > 0 && (
-                                    <button type="button" onClick={handlePrevious} className="back">Anterior</button>
-                                )}
-                                {state.index < questions.length - 1 && !showFastingError && (
-                                    <button type="button" onClick={handleNext} className="next">Siguiente</button>
-                                )}
-                                {state.index >= questions.length - 1 && (
-                                    <button type="submit">Enviar</button>
-                                )}
-                            </div>
-                        </form>
-                    )}
-                </div>
-            )}
+                            </form>
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
-    </div>
-);};
+    );
+};
 
 export default AppointmentForm;
