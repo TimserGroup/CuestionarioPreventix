@@ -234,6 +234,7 @@ const AppointmentForm = () => {
     const currentQuestion = questions[state.index];
 
     useEffect(() => {
+        window.location.reload(true);
         if (currentQuestion && currentQuestion.type !== 'choice') {
             setValue(currentQuestion.field, cachedData[currentQuestion.field] || '');
         }
