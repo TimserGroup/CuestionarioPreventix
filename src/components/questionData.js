@@ -148,29 +148,13 @@ export const questions = [
         id: 'sampleLocation',
         question: 'Lugar de toma de muestra',
         answers: [
-            'Periférico 1950' ,
-            'Sede Insurgentes - Sala de Ajustes',
-            'Edificio Revolución - Aula Cristal',
-            'Suprema Corte',
-            '16 de Septiembre',
-            'Bolivar',
-            'Pino Suaréz',
-            'Toluca',
-            'Chimalpopoca'
+            'TEPJF Carlota Armero'
         ],
         field: 'sampleLocation',
         type: 'choice',
         nextq: 'docFQ',
         mapping: {
-            'Periférico 1950' : 1921,
-            'Sede Insurgentes - Sala de Ajustes' : 1921,
-            'Edificio Revolución - Aula Cristal' : 1922,
-            '16 de Septiembre': 1915,
-            'Suprema Corte': 1916,
-            'Bolivar': 1917,
-            'Pino Suaréz': 1918,
-            'Toluca': 1919,
-            'Chimalpopoca': 1920
+            'TEPJF Carlota Armero' : 1783
         }
     },
     {
